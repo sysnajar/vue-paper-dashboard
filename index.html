@@ -23,6 +23,34 @@
 <!-- built files will be auto injected -->
 <!--  Google Maps Plugin    -->
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAamVCoyQ4AuvBpxVRMs9P-HFkfPVQj0Kw" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script> 
+  function load(){
+    //alert(window.table.length)
+   var api_host = 'http://creden.co/capi/';
+   var data = {param1 : 'val1'};
+      $.ajax({
+                type: "POST",
+                url: api_host + "face_list",
+                data : data,
+                dataType: "json",
+        success: function(data) {
+          var h = '';
+          
+                    if(data.length){  
+                       
+                      window.t.data = data
+                    } 
+                },
+                error: function(request, status, error){
+                    alert("|"+ status + ' |' +error);
+                }
+            });
+  
+  } 
 
+$(document).ready(function(){
+     load();
+  });</script>
 </body>
 </html>
