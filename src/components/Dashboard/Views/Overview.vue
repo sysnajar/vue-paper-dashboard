@@ -1,9 +1,9 @@
 <template>
   <div>
-
+  <button v-on:click="getData">getDataTest</button>
     <!--Stats cards-->
     <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
+      <div class="col-lg-4 col-sm-6" v-for="stats in statsCards">
         <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
             <i :class="stats.icon"></i>
@@ -12,9 +12,6 @@
             <p>{{stats.title}}</p>
             {{stats.value}}
           </div>
-          <div class="stats" slot="footer">
-            <i :class="stats.footerIcon"></i> {{stats.footerText}}
-          </div>
         </stats-card>
       </div>
     </div>
@@ -22,7 +19,7 @@
     <!--Charts-->
     <div class="row">
 
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="display:none">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options">
           <h4 class="title" slot="title">Users behavior</h4>
           <span slot="subTitle"> 24 Hours performance</span>
@@ -36,21 +33,20 @@
         </chart-card>
       </div>
 
-      <div class="col-md-6 col-xs-12">
+      <div class="col-md-12 col-xs-12">
         <chart-card :chart-data="preferencesChart.data"  chart-type="Pie">
           <h4 class="title" slot="title">Email Statistics</h4>
           <span slot="subTitle"> Last campaign performance</span>
           <span slot="footer">
             <i class="ti-timer"></i> Campaign set 2 days ago</span>
           <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Open
-            <i class="fa fa-circle text-danger"></i> Bounce
-            <i class="fa fa-circle text-warning"></i> Unsubscribe
+            <i class="fa fa-circle text-info"></i> รูปตรง
+            <i class="fa fa-circle text-warning"></i> รูปไม่ตรง
           </div>
         </chart-card>
       </div>
 
-      <div class="col-md-6 col-xs-12">
+      <div class="col-md-12 col-xs-12" style="display:none">
         <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options">
           <h4 class="title" slot="title">2015 Sales</h4>
           <span slot="subTitle"> All products including Taxes</span>
@@ -67,9 +63,16 @@
 
   </div>
 </template>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
+  import axios from 'axios'
+  const chartData = { labels: ['75%', '25%'], series: [75, 25] }
+
+  const allBox = 0
+  const sameBox = 0
+  const notSameBox = 0
   export default {
     components: {
       StatsCard,
@@ -83,35 +86,21 @@
         statsCards: [
           {
             type: 'warning',
-            icon: 'ti-server',
-            title: 'Capacity',
-            value: '105GB',
-            footerText: 'Updated now',
-            footerIcon: 'ti-reload'
+            icon: 'ti-user',
+            title: 'รูปทั้งหมด',
+            value: allBox
           },
           {
             type: 'success',
-            icon: 'ti-wallet',
-            title: 'Revenue',
-            value: '$1,345',
-            footerText: 'Last day',
-            footerIcon: 'ti-calendar'
+            icon: 'ti-check',
+            title: 'รูปตรง',
+            value: sameBox
           },
           {
             type: 'danger',
-            icon: 'ti-pulse',
-            title: 'Errors',
-            value: '23',
-            footerText: 'In the last hour',
-            footerIcon: 'ti-timer'
-          },
-          {
-            type: 'info',
-            icon: 'ti-twitter-alt',
-            title: 'Followers',
-            value: '+45',
-            footerText: 'Updated now',
-            footerIcon: 'ti-reload'
+            icon: 'ti-close',
+            title: 'รูปไม่ตรง',
+            value: notSameBox
           }
         ],
         usersChart: {
@@ -127,7 +116,7 @@
             low: 0,
             high: 1000,
             showArea: true,
-            height: '245px',
+            height: '246px',
             axisX: {
               showGrid: false
             },
@@ -151,17 +140,34 @@
             axisX: {
               showGrid: false
             },
-            height: '245px'
+            height: '247px',
+            isC: true
           }
         },
         preferencesChart: {
-          data: {
-            labels: ['62%', '32%', '6%'],
-            series: [62, 32, 6]
-          },
-          options: {}
+          data: chartData,
+          options: {
+            myname: 'Somchai',
+            isC: true
+          }
         }
 
+      }
+    },
+    mounted () {
+      window.card = this.statsCards
+      window.pieData = this.preferencesChart.data
+      window.setVueData()
+    },
+    created () {
+      window.load()
+    },
+    methods: {
+      getData (resource) {
+        var Route = window.api_host + 'face_list'
+        axios.get(Route).then((response) => {
+          console.log(response)
+        })
       }
     }
   }

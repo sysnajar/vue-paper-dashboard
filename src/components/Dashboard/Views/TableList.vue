@@ -71,6 +71,9 @@
           data: [...tableData]
         }
       }
+    },
+    mounted () {
+      load()
     }
   }
 

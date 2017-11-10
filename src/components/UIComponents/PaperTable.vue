@@ -14,29 +14,40 @@
          </th>
         </thead>
         <tbody>
-          <tr v-for="item in data">
+          <tr v-for="(item, index) in data">
             <td v-for="column,c in columns" v-if="hasValue(item, column)">
 				
-					<span v-if="column=='f1' || column=='f2'">
-							<img v-bind:src="'http://creden.co/face/images/'+itemValue(item, column)" width="100">
-					</span>
-					<span v-else>
-					        <span v-if="column=='isIdentical' && item[column]=='false'">
- 							     <font color='red'>{{itemValue(item, column)}}</font>
-					       </span>
-						   <span v-else>
- 							     {{itemValue(item, column)}}
-						   </span>
-					</span>
+    					<span v-if="column=='f1' || column=='f2'">
+    							<img v-bind:src="'http://creden.co/face/images/'+itemValue(item, column)" width="100">
+    					</span>
+    					<span v-else>
+    					        <span v-if="column=='isIdentical' && item[column]=='false'">
+     							     <font color='red'>{{itemValue(item, column)}}</font>
+    					        </span>
+      						    <span v-else>
+       							    {{itemValue(item, column)}}
+      						    </span>
+    					</span>
 				
            </td>
           </tr>
         </tbody>
       </table>
+      <paginate
+        :page-count="numPage()"
+        :page-range="3"
+        :margin-pages="2"
+        :click-handler="clickCallback"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'"
+        :page-class="'page-item'">
+      </paginate>
     </div>
   </div>
 </template>
 <script>
+
   export default {
     props: {
       columns: Array,
@@ -80,11 +91,28 @@
         if (column === 'f2') return 'Photo2'
         if (column === 'isIdentical') return 'Match?'
         return column
+      },
+      numPage () {
+        var row = 4
+        return Math.ceil(window.t.origin.length / row)
+      },
+      clickCallback (pageNum) {
+        var row = 4
+        var start = (pageNum - 1) * row
+        var stop = start + row
+        if (stop > window.t.origin.length) {
+          stop = window.t.origin.length
+        }
+        this.data = []
+        for (var i = start; i < stop; i++) {
+          window.t.origin[i].id = i + 1
+          this.data.push(window.t.origin[i])
+        }
+      },
+      mounted () {
+        window.t = this
       }
     }
   }
 
 </script>
-<style>
-
-</style>

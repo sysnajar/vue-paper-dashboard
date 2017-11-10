@@ -83,6 +83,12 @@
     mounted () {
       this.updateChartId()
       this.$nextTick(this.initChart)
+      if (JSON.stringify(this.chartOptions) === '{}') {
+        window.c = this
+      }
+      if (window.setVueData) {
+        setVueData()
+      }
     }
   }
 

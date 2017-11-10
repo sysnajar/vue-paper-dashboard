@@ -4,9 +4,19 @@ const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
     {
+      name: 'Dashboard',
+      icon: 'ti-panel',
+      path: '/admin/overview'
+    },
+    {
       name: 'Image List',
       icon: 'ti-view-list-alt',
       path: '/admin/table-list'
+    },
+    {
+      name: 'Register',
+      icon: 'ti-user',
+      path: '/admin/stats'
     }
   ],
   displaySidebar (value) {
