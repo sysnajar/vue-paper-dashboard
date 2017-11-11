@@ -25,9 +25,9 @@
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAamVCoyQ4AuvBpxVRMs9P-HFkfPVQj0Kw" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script> 
+  var api_host = 'http://creden.co/capi/'
   function load(){
     //alert(window.table.length)
-   var api_host = 'http://creden.co/capi/';
    var data = {param1 : 'val1'};
       $.ajax({
                 type: "POST",
@@ -36,10 +36,10 @@
                 dataType: "json",
         success: function(data) {
           var h = '';
-          
-                    if(data.length){  
-                       
-                      window.t.data = data
+                    if(data.length){
+                      window.face_list = data;
+                      setVueData()
+                      
                     } 
                 },
                 error: function(request, status, error){
@@ -49,7 +49,47 @@
   
   } 
 
+function setVueData()
+{
+  var data = face_list
+  if(window.t){
+
+                      window.t.origin = data 
+                      window.t.data=[]                      
+                      for (var i = 0; i < 4; i++) {
+                        window.t.origin[i].id = i + 1
+                        window.t.data.push(window.t.origin[i])
+                      }
+  }
+  if(window.c){
+    var is_same = 0;
+                      var not_same = 0;
+                      for (var i = 0; i < data.length; i++){
+                        if(data[i].isIdentical=="true"){
+                          is_same++;
+                        }else{
+                          not_same++;
+                        }
+                      }
+                      var is_same_percent = is_same*100/data.length
+                      var not_same_percent = 100 - is_same_percent
+                      is_same_percent = is_same_percent.toFixed(2);
+                      not_same_percent = not_same_percent.toFixed(2);
+
+                      window.pieData.labels[0] = is_same_percent+'%('+is_same+'รูป)'
+                      window.pieData.labels[1] = not_same_percent+'%('+not_same+'รูป)'
+
+                      window.pieData.series[0] = is_same_percent
+                      window.pieData.series[1] = not_same_percent
+                      
+                      window.card[0].value = is_same + not_same
+                      window.card[1].value = is_same
+                      window.card[2].value = not_same
+  }  
+}
+var face_list = null;
 $(document).ready(function(){
+     //alert('index kit1234')
      load();
   });</script>
 </body>
