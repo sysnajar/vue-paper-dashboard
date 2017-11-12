@@ -73,7 +73,7 @@
       }
     },
     mounted () {
-      load()
+      window.load()
     }
   }
 

@@ -87,7 +87,7 @@
         window.c = this
       }
       if (window.setVueData) {
-        setVueData()
+        window.setVueData()
       }
     }
   }
